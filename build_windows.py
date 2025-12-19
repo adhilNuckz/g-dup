@@ -20,6 +20,8 @@ opts = [
     '--icon=NONE',                # Add icon later if needed
     '--clean',                    # Clean cache
     '--noconfirm',                # Don't ask for confirmation
+    # Include credentials.json
+    '--add-data=dup/credentials.json;dup',
     # Add hidden imports
     '--hidden-import=dup.cli',
     '--hidden-import=dup.auth',

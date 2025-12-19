@@ -17,29 +17,19 @@ def get_credentials_json() -> dict:
     """
     Get OAuth credentials for Google Drive API.
     
-    Production credentials are embedded directly in the code.
-    For development, you can place credentials.json in the dup/ directory.
+    Reads credentials from credentials.json file in the dup/ directory.
     """
-    # Check if credentials.json exists (for development/testing)
     script_dir = Path(__file__).parent
     creds_file = script_dir / 'credentials.json'
     
-    if creds_file.exists():
-        with open(creds_file, 'r') as f:
-            return json.load(f)
+    if not creds_file.exists():
+        raise FileNotFoundError(
+            "credentials.json not found. Please place it in the dup/ directory.\n"
+            "See README for instructions on obtaining OAuth credentials."
+        )
     
-    # Production credentials embedded directly
-    return {
-        "installed": {
-            "client_id": "1062400359572-b1ceskida9r327qai9oqrl50sb98bdoa.apps.googleusercontent.com",
-            "project_id": "g-dup-481714",
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_secret": "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",
-            "redirect_uris": ["http://localhost"]
-        }
-    }
+    with open(creds_file, 'r') as f:
+        return json.load(f)
 
 
 def authenticate() -> Credentials:

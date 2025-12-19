@@ -14,7 +14,7 @@ if os.path.exists('dist'):
 # PyInstaller options
 opts = [
     'dup/__main__.py',           # Entry point
-    '--name=dup',                 # Executable name
+    '--name=gdup',                # Executable name
     '--onefile',                  # Single executable
     '--console',                  # Console application
     '--icon=NONE',                # Add icon later if needed
@@ -36,5 +36,5 @@ run(opts)
 
 print("\n" + "="*60)
 print("Build complete!")
-print("Executable: dist/dup.exe")
+print("Executable: dist/gdup.exe")
 print("="*60)

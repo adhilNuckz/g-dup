@@ -14,8 +14,8 @@ from .commands.link import link_command
 from .commands.download import download_command
 
 app = typer.Typer(
-    name="dup",
-    help="Drive Upload Program - Manage Google Drive from the command line",
+    name="gdup",
+    help="Google Drive Upload Program - Manage Google Drive from the command line",
     add_completion=False
 )
 console = Console()
@@ -90,10 +90,10 @@ def down(
 @app.command()
 def version():
     """Show version information."""
-    console.print(f"[cyan]dup[/cyan] version [green]{__version__}[/green]")
+    console.print(f"[cyan]gdup[/cyan] version [green]{__version__}[/green]")
 
 
-@app.callback()
+@app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
     version_flag: bool = typer.Option(
@@ -110,14 +110,19 @@ def main(
     Manage Google Drive files from the command line.
     """
     if version_flag:
-        console.print(f"[cyan]dup[/cyan] version [green]{__version__}[/green]")
+        console.print(f"[cyan]gdup[/cyan] version [green]{__version__}[/green]")
+        raise typer.Exit()
+    
+    # If no command provided, show help
+    if ctx.invoked_subcommand is None:
+        console.print(ctx.get_help())
         raise typer.Exit()
     
     # Check if user is authenticated for commands that need it
     if ctx.invoked_subcommand and ctx.invoked_subcommand != 'login':
         if not is_authenticated():
             console.print("[yellow]⚠️  Not authenticated with Google Drive[/yellow]")
-            console.print("Run [cyan]dup login[/cyan] to authenticate")
+            console.print("Run [cyan]gdup login[/cyan] to authenticate")
             raise typer.Exit(1)
 
 

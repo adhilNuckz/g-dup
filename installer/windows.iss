@@ -1,14 +1,14 @@
 ; DUP - Windows Installer Script for Inno Setup
 ; Inno Setup: https://jrsoftware.org/isinfo.php
 
-#define MyAppName "DUP"
+#define MyAppName "gdup"
 #define MyAppVersion "1.0.0"
-#define MyAppPublisher "Your Company"
-#define MyAppURL "https://github.com/yourusername/dup"
-#define MyAppExeName "dup.exe"
+#define MyAppPublisher "Daily Needs Developments"
+#define MyAppURL "https://github.com/adhilNuckz/g-dup"
+#define MyAppExeName "gdup.exe"
 
 [Setup]
-AppId={{YOUR-UNIQUE-APP-ID-HERE}}
+AppId={{8F9C4D2E-1A3B-4F6E-9D2C-7A8B3E4D5F6A}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
@@ -20,7 +20,7 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=..\LICENSE
 OutputDir=..\dist
-OutputBaseFilename=dup-setup-{#MyAppVersion}
+OutputBaseFilename=gdup-setup-{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

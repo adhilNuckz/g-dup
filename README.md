@@ -1,4 +1,4 @@
-# DUP - Drive Upload Program
+# gdup - Google Drive Upload Program
 
 <p align="center">
   <strong>A cross-platform CLI tool for managing Google Drive files</strong>
@@ -27,32 +27,32 @@
 
 ### Windows
 
-1. Download the installer from [Releases](https://github.com/yourusername/dup/releases)
-2. Run `dup-setup-1.0.0.exe`
+1. Download the installer from [Releases](https://github.com/yourusername/gdup/releases)
+2. Run `gdup-setup-1.0.0.exe`
 3. The installer will:
-   - Install DUP to `C:\Program Files\dup\`
-   - Add DUP to your PATH automatically
+   - Install gdup to `C:\Program Files\gdup\`
+   - Add gdup to your PATH automatically
    - Create an uninstaller entry in Apps & Features
 
 After installation, open a new terminal and run:
 ```bash
-dup login
+gdup login
 ```
 
 ### Linux
 
 #### Method 1: Install from source
 ```bash
-git clone https://github.com/yourusername/dup.git
-cd dup
+git clone https://github.com/yourusername/gdup.git
+cd gdup
 chmod +x install-linux.sh
 ./install-linux.sh
 ```
 
 #### Method 2: Using pip
 ```bash
-git clone https://github.com/yourusername/dup.git
-cd dup
+git clone https://github.com/yourusername/gdup.git
+cd gdup
 pip install --user .
 ```
 
@@ -69,59 +69,59 @@ Add this line to your `~/.bashrc` or `~/.zshrc` to make it permanent.
 
 1. **Authenticate with Google Drive:**
    ```bash
-   dup login
+   gdup login
    ```
    This will open your browser to authenticate with Google.
 
 2. **List files in your Drive:**
    ```bash
-   dup ls
+   gdup ls
    ```
 
 3. **Navigate folders:**
    ```bash
-   dup cd Documents
-   dup pwd
+   gdup cd Documents
+   gdup pwd
    ```
 
 4. **Upload files:**
    ```bash
-   dup up myfile.pdf
-   dup up myfolder/
+   gdup up myfile.pdf
+   gdup up myfolder/
    ```
 
 5. **Download files:**
    ```bash
-   dup down myfile.pdf
+   gdup down myfile.pdf
    ```
 
 6. **Get shareable links:**
    ```bash
-   dup link myfile.pdf
+   gdup link myfile.pdf
    ```
 
 ## 📚 Commands
 
-### `dup login`
+### `gdup login`
 Authenticate with Google Drive.
 
 **Example:**
 ```bash
-dup login
+gdup login
 ```
 
 Opens your browser for OAuth authentication. Your credentials are saved locally and you won't need to login again unless the token expires.
 
 ---
 
-### `dup ls [path]`
+### `gdup ls [path]`
 List files in current or specified Drive folder.
 
 **Examples:**
 ```bash
-dup ls              # List current folder
-dup ls Documents    # List Documents folder
-dup ls /            # List root folder
+gdup ls              # List current folder
+gdup ls Documents    # List Documents folder
+gdup ls /            # List root folder
 ```
 
 **Output:**
@@ -138,13 +138,13 @@ Type    Name              Size      Modified
 
 ---
 
-### `dup tree [path]`
+### `gdup tree [path]`
 Show recursive folder structure.
 
 **Examples:**
 ```bash
-dup tree              # Tree from current folder
-dup tree Documents    # Tree from Documents folder
+gdup tree              # Tree from current folder
+gdup tree Documents    # Tree from Documents folder
 ```
 
 **Output:**
@@ -159,25 +159,25 @@ dup tree Documents    # Tree from Documents folder
 
 ---
 
-### `dup cd <path>`
+### `gdup cd <path>`
 Change current Drive folder.
 
 **Examples:**
 ```bash
-dup cd Documents        # Go to Documents
-dup cd ..               # Go to parent folder
-dup cd /                # Go to root
-dup cd Projects/Code    # Navigate multiple levels
+gdup cd Documents        # Go to Documents
+gdup cd ..               # Go to parent folder
+gdup cd /                # Go to root
+gdup cd Projects/Code    # Navigate multiple levels
 ```
 
 ---
 
-### `dup pwd`
+### `gdup pwd`
 Show current Drive path.
 
 **Example:**
 ```bash
-dup pwd
+gdup pwd
 ```
 
 **Output:**
@@ -187,14 +187,14 @@ dup pwd
 
 ---
 
-### `dup up <path>`
+### `gdup up <path>`
 Upload file or folder to current Drive location.
 
 **Examples:**
 ```bash
-dup up report.pdf           # Upload a file
-dup up ./myfolder           # Upload a folder
-dup up "my document.docx"   # Upload file with spaces
+gdup up report.pdf           # Upload a file
+gdup up ./myfolder           # Upload a folder
+gdup up "my document.docx"   # Upload file with spaces
 ```
 
 **Output:**
@@ -208,12 +208,12 @@ Link: https://drive.google.com/file/d/xxxxx/view
 
 ---
 
-### `dup link <filename>`
+### `gdup link <filename>`
 Generate shareable Google Drive link for a file.
 
 **Examples:**
 ```bash
-dup link report.pdf
+gdup link report.pdf
 ```
 
 **Behavior:**
@@ -232,14 +232,14 @@ Make it publicly accessible? [y/n]: y
 
 ---
 
-### `dup down <filename> [--dest <path>]`
+### `gdup down <filename> [--dest <path>]`
 Download a file from current Drive location to local machine.
 
 **Examples:**
 ```bash
-dup down report.pdf                    # Download to current directory
-dup down report.pdf --dest ~/Downloads # Download to specific directory
-dup down report.pdf -d myfile.pdf      # Download with custom name
+gdup down report.pdf                    # Download to current directory
+gdup down report.pdf --dest ~/Downloads # Download to specific directory
+gdup down report.pdf -d myfile.pdf      # Download with custom name
 ```
 
 **Features:**
@@ -256,32 +256,32 @@ Downloading report.pdf
 Saved to: report.pdf
 ```
 
-**Note:** Folder downloads are not yet supported. Use `dup down` for individual files only.
+**Note:** Folder downloads are not yet supported. Use `gdup down` for individual files only.
 
 ---
 
-### `dup version`
+### `gdup version`
 Show version information.
 
 **Example:**
 ```bash
-dup version
+gdup version
 ```
 
 **Output:**
 ```
-dup version 1.0.0
+gdup version 1.0.0
 ```
 
 ## 🔧 Configuration
 
-DUP stores configuration and tokens in platform-specific locations:
+gdup stores configuration and tokens in platform-specific locations:
 
-- **Windows**: `%APPDATA%\dup\`
+- **Windows**: `%APPDATA%\gdup\`
   - `token.json` - OAuth token
   - `state.json` - Current folder state
 
-- **Linux**: `~/.config/dup/`
+- **Linux**: `~/.config/gdup/`
   - `token.json` - OAuth token
   - `state.json` - Current folder state
 
@@ -289,17 +289,17 @@ DUP stores configuration and tokens in platform-specific locations:
 
 **Windows:**
 1. Go to Settings > Apps > Installed apps
-2. Find "DUP" and click Uninstall
-3. Your tokens and configuration are preserved in `%APPDATA%\dup\`
+2. Find "gdup" and click Uninstall
+3. Your tokens and configuration are preserved in `%APPDATA%\gdup\`
 
 **Linux:**
 ```bash
-pip uninstall dup
+pip uninstall gdup
 ```
 
 To remove configuration:
 ```bash
-rm -rf ~/.config/dup
+rm -rf ~/.config/gdup
 ```
 
 ## 🛠️ Building from Source
@@ -323,7 +323,7 @@ rm -rf ~/.config/dup
    ```bash
    python build_windows.py
    ```
-   This creates `dist/dup.exe`
+   This creates `dist/gdup.exe`
 
 3. **Create installer (requires Inno Setup):**
    - Install [Inno Setup](https://jrsoftware.org/isinfo.php)
@@ -345,13 +345,13 @@ rm -rf ~/.config/dup
 
 3. **Or create a standalone binary:**
    ```bash
-   pyinstaller --onefile dup/__main__.py --name dup
+   pyinstaller --onefile gdup/__main__.py --name gdup
    ```
-   Copy `dist/dup` to `/usr/local/bin/`
+   Copy `dist/gdup` to `/usr/local/bin/`
 
 ## 🔐 OAuth Credentials Setup (For Developers)
 
-To distribute DUP, you need to embed OAuth credentials. Here's how:
+To distribute gdup, you need to embed OAuth credentials. Here's how:
 
 1. **Create a Google Cloud Project:**
    - Go to [Google Cloud Console](https://console.cloud.google.com/)
@@ -368,8 +368,8 @@ To distribute DUP, you need to embed OAuth credentials. Here's how:
    - Choose "Desktop app"
    - Download the credentials JSON file
 
-4. **Add Credentials to DUP:**
-   - Place `credentials.json` in the `dup/` directory
+4. **Add Credentials to gdup:**
+   - Place `credentials.json` in the `gdup/` directory
    - For production distribution, embed the credentials in `auth.py`
 
 5. **OAuth Consent Screen:**
@@ -382,8 +382,8 @@ To distribute DUP, you need to embed OAuth credentials. Here's how:
 ### Project Structure
 
 ```
-dup/
-├── dup/
+gdup/
+├── gdup/
 │   ├── __init__.py         # Package initialization
 │   ├── __main__.py         # Entry point
 │   ├── cli.py              # CLI interface
@@ -415,8 +415,8 @@ dup/
 pip install -e .
 
 # Run directly
-python -m dup login
-python -m dup ls
+python -m gdup login
+python -m gdup ls
 ```
 
 ### Running Tests
@@ -442,15 +442,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🚧 Roadmap
 
-Future features planned for DUP:
+Future features planned for gdup:
 
-- [ ] `dup down` - Download files from Drive
-- [ ] `dup rm` - Delete files
-- [ ] `dup mv` - Move/rename files
-- [ ] `dup cp` - Copy files
+- [ ] `gdup down` - Download files from Drive
+- [ ] `gdup rm` - Delete files
+- [ ] `gdup mv` - Move/rename files
+- [ ] `gdup cp` - Copy files
 - [ ] Folder synchronization
 - [ ] File encryption before upload
-- [ ] Interactive shell mode (`dup shell`)
+- [ ] Interactive shell mode (`gdup shell`)
 - [ ] Search functionality
 - [ ] Trash management
 - [ ] Shared drive support
@@ -459,19 +459,19 @@ Future features planned for DUP:
 ## ❓ FAQ
 
 **Q: Do I need to create a Google Cloud project?**  
-A: No! As an end user, you just install and run `dup login`. The developer has already set up the OAuth credentials.
+A: No! As an end user, you just install and run `gdup login`. The developer has already set up the OAuth credentials.
 
 **Q: Is my data secure?**  
-A: Yes. DUP uses Google's official OAuth 2.0 flow. Your credentials are stored locally and never sent to any third party.
+A: Yes. gdup uses Google's official OAuth 2.0 flow. Your credentials are stored locally and never sent to any third party.
 
 **Q: Can I use this for large files?**  
-A: Yes! DUP supports resumable uploads for large files and shows progress.
+A: Yes! gdup supports resumable uploads for large files and shows progress.
 
-**Q: What happens if I uninstall DUP?**  
+**Q: What happens if I uninstall gdup?**  
 A: Your tokens and configuration remain in the config directory, so you won't need to re-authenticate if you reinstall.
 
 **Q: Can I use this in scripts?**  
-A: Yes! DUP is designed to be script-friendly. Just make sure to authenticate first.
+A: Yes! gdup is designed to be script-friendly. Just make sure to authenticate first.
 
 ## 🐛 Troubleshooting
 
@@ -480,10 +480,10 @@ A: Yes! DUP is designed to be script-friendly. Just make sure to authenticate fi
 - For end users, this should not appear in the distributed version.
 
 **"Not authenticated with Google Drive"**  
-- Run `dup login` to authenticate.
+- Run `gdup login` to authenticate.
 
 **"Permission denied"**  
-- On Linux, you may need to add execute permission: `chmod +x ~/.local/bin/dup`
+- On Linux, you may need to add execute permission: `chmod +x ~/.local/bin/gdup`
 
 **PATH not found after installation (Windows)**  
 - Restart your terminal or command prompt
@@ -497,7 +497,7 @@ A: Yes! DUP is designed to be script-friendly. Just make sure to authenticate fi
 ## 📧 Support
 
 For issues, questions, or suggestions:
-- Open an issue on [GitHub](https://github.com/yourusername/dup/issues)
+- Open an issue on [GitHub](https://github.com/yourusername/gdup/issues)
 - Check existing issues for solutions
 
 ---

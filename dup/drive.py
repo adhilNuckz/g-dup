@@ -2,9 +2,11 @@
 
 import io
 import os
+import time
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload, MediaIoBaseUpload
+from googleapiclient.errors import HttpError
 from .auth import get_drive_service
 
 
@@ -23,14 +25,23 @@ def list_files(folder_id: str = 'root', page_size: int = 100) -> List[Dict[str, 
     
     query = f"'{folder_id}' in parents and trashed=false"
     
-    results = service.files().list(
-        q=query,
-        pageSize=page_size,
-        fields="files(id, name, mimeType, size, modifiedTime, webViewLink)",
-        orderBy="folder,name"
-    ).execute()
-    
-    return results.get('files', [])
+    # Retry logic for SSL errors
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            results = service.files().list(
+                q=query,
+                pageSize=page_size,
+                fields="files(id, name, mimeType, size, modifiedTime, webViewLink)",
+                orderBy="folder,name"
+            ).execute()
+            
+            return results.get('files', [])
+        except (ConnectionError, OSError) as e:
+            if attempt < max_retries - 1:
+                time.sleep(1)  # Wait before retry
+                continue
+            raise Exception(f"Connection error after {max_retries} attempts. Please check your internet connection.")
 
 
 def get_file_by_name(name: str, parent_id: str = 'root') -> Optional[Dict[str, Any]]:
@@ -48,14 +59,23 @@ def get_file_by_name(name: str, parent_id: str = 'root') -> Optional[Dict[str, A
     
     query = f"name='{name}' and '{parent_id}' in parents and trashed=false"
     
-    results = service.files().list(
-        q=query,
-        pageSize=1,
-        fields="files(id, name, mimeType, size, modifiedTime, webViewLink)"
-    ).execute()
-    
-    files = results.get('files', [])
-    return files[0] if files else None
+    # Retry logic for SSL errors
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            results = service.files().list(
+                q=query,
+                pageSize=1,
+                fields="files(id, name, mimeType, size, modifiedTime, webViewLink)"
+            ).execute()
+            
+            files = results.get('files', [])
+            return files[0] if files else None
+        except (ConnectionError, OSError) as e:
+            if attempt < max_retries - 1:
+                time.sleep(1)
+                continue
+            return None
 
 
 def get_file_by_id(file_id: str) -> Optional[Dict[str, Any]]:
@@ -70,14 +90,22 @@ def get_file_by_id(file_id: str) -> Optional[Dict[str, Any]]:
     """
     service = get_drive_service()
     
-    try:
-        file = service.files().get(
-            fileId=file_id,
-            fields="id, name, mimeType, size, modifiedTime, webViewLink, parents"
-        ).execute()
-        return file
-    except Exception:
-        return None
+    # Retry logic for SSL errors
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            file = service.files().get(
+                fileId=file_id,
+                fields="id, name, mimeType, size, modifiedTime, webViewLink, parents"
+            ).execute()
+            return file
+        except (ConnectionError, OSError) as e:
+            if attempt < max_retries - 1:
+                time.sleep(1)
+                continue
+            return None
+        except Exception:
+            return None
 
 
 def is_folder(file_metadata: Dict[str, Any]) -> bool:
@@ -104,12 +132,20 @@ def create_folder(name: str, parent_id: str = 'root') -> Dict[str, Any]:
         'parents': [parent_id]
     }
     
-    folder = service.files().create(
-        body=file_metadata,
-        fields='id, name, mimeType'
-    ).execute()
-    
-    return folder
+    # Retry logic for SSL errors
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            folder = service.files().create(
+                body=file_metadata,
+                fields='id, name, mimeType'
+            ).execute()
+            return folder
+        except (ConnectionError, OSError) as e:
+            if attempt < max_retries - 1:
+                time.sleep(1)
+                continue
+            raise Exception(f"Connection error after {max_retries} attempts. Please check your internet connection.")
 
 
 def upload_file(file_path: str, parent_id: str = 'root', callback=None) -> Dict[str, Any]:
@@ -145,10 +181,20 @@ def upload_file(file_path: str, parent_id: str = 'root', callback=None) -> Dict[
     )
     
     response = None
+    max_retries = 3
+    
     while response is None:
-        status, response = request.next_chunk()
-        if status and callback:
-            callback(status.progress())
+        for attempt in range(max_retries):
+            try:
+                status, response = request.next_chunk()
+                if status and callback:
+                    callback(status.progress())
+                break  # Success, exit retry loop
+            except (ConnectionError, OSError) as e:
+                if attempt < max_retries - 1:
+                    time.sleep(1)
+                    continue
+                raise Exception(f"Connection error after {max_retries} attempts. Please check your internet connection.")
     
     return response
 
@@ -211,10 +257,20 @@ def make_file_public(file_id: str) -> None:
         'role': 'reader'
     }
     
-    service.permissions().create(
-        fileId=file_id,
-        body=permission
-    ).execute()
+    # Retry logic for SSL errors
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            service.permissions().create(
+                fileId=file_id,
+                body=permission
+            ).execute()
+            return
+        except (ConnectionError, OSError) as e:
+            if attempt < max_retries - 1:
+                time.sleep(1)
+                continue
+            raise Exception(f"Connection error after {max_retries} attempts. Please check your internet connection.")
 
 
 def is_file_public(file_id: str) -> bool:
@@ -229,19 +285,27 @@ def is_file_public(file_id: str) -> bool:
     """
     service = get_drive_service()
     
-    try:
-        permissions = service.permissions().list(
-            fileId=file_id,
-            fields='permissions(type, role)'
-        ).execute()
-        
-        for permission in permissions.get('permissions', []):
-            if permission.get('type') == 'anyone':
-                return True
-        
-        return False
-    except Exception:
-        return False
+    # Retry logic for SSL errors
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            permissions = service.permissions().list(
+                fileId=file_id,
+                fields='permissions(type, role)'
+            ).execute()
+            
+            for permission in permissions.get('permissions', []):
+                if permission.get('type') == 'anyone':
+                    return True
+            
+            return False
+        except (ConnectionError, OSError) as e:
+            if attempt < max_retries - 1:
+                time.sleep(1)
+                continue
+            return False
+        except Exception:
+            return False
 
 
 def build_tree(folder_id: str = 'root', prefix: str = '', is_last: bool = True, max_depth: int = 10, current_depth: int = 0) -> List[str]:
@@ -395,10 +459,20 @@ def download_file(file_id: str, destination_path: str, callback=None) -> str:
     with open(destination_path, 'wb') as fh:
         downloader = MediaIoBaseDownload(fh, request)
         done = False
+        max_retries = 3
+        
         while not done:
-            status, done = downloader.next_chunk()
-            if status and callback:
-                callback(status.progress())
+            for attempt in range(max_retries):
+                try:
+                    status, done = downloader.next_chunk()
+                    if status and callback:
+                        callback(status.progress())
+                    break  # Success, exit retry loop
+                except (ConnectionError, OSError) as e:
+                    if attempt < max_retries - 1:
+                        time.sleep(1)
+                        continue
+                    raise Exception(f"Connection error after {max_retries} attempts. Please check your internet connection.")
     
     return destination_path
 

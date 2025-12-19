@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dup"
+name = "gdup"
 version = "1.0.0"
-description = "Drive Upload Program - Manage Google Drive from the command line"
+description = "Google Drive Upload Program - Manage Google Drive from the command line"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
@@ -52,7 +52,7 @@ Repository = "https://github.com/yourusername/dup.git"
 Issues = "https://github.com/yourusername/dup/issues"
 
 [project.scripts]
-dup = "dup.cli:cli"
+gdup = "dup.cli:cli"
 
 [tool.setuptools.packages.find]
 where = ["."]

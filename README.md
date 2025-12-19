@@ -502,4 +502,4 @@ For issues, questions, or suggestions:
 
 ---
 
-<p align="center">Made with ❤️ for easier Google Drive management</p>
+<p align="center">Made with ❤️ from DND for easier Google Drive management</p>
